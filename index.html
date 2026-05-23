@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BN LAST KING </title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#eef2ff;
+overflow:hidden;
+}
+
+.bg-design{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top left,#ffffff 0%,#dbeafe 45%),
+radial-gradient(circle at bottom right,#e9d5ff 0%,#ffffff 45%);
+z-index:-1;
+}
+
+.page{
+position:absolute;
+inset:0;
+display:none;
+opacity:0;
+transform:translateY(30px);
+transition:.4s;
+}
+
+.page.active{
+display:flex;
+opacity:1;
+transform:translateY(0);
+}
+
+.card{
+background:rgba(255,255,255,.92);
+backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.8);
+box-shadow:
+0 10px 35px rgba(99,102,241,.08),
+inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+.input{
+width:100%;
+padding:16px;
+border-radius:22px;
+border:2px solid #e5e7eb;
+outline:none;
+font-weight:700;
+text-align:center;
+font-size:14px;
+transition:.3s;
+background:white;
+}
+
+.input:focus{
+border-color:#6366f1;
+box-shadow:0 0 20px rgba(99,102,241,.15);
+}
+
+.btn{
+width:100%;
+padding:16px;
+border:none;
+border-radius:22px;
+font-weight:800;
+cursor:pointer;
+transition:.2s;
+letter-spacing:1px;
+}
+
+.btn:active{
+transform:scale(.97);
+}
+
+.btn-primary{
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
+color:white;
+box-shadow:0 10px 25px rgba(99,102,241,.25);
+}
+
+.btn-light{
+background:white;
+color:#4f46e5;
+border:2px solid #e5e7eb;
+}
+
+.avatar{
+width:140px;
+height:140px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#ffffff,#dbeafe);
+font-size:60px;
+color:#4f46e5;
+box-shadow:
+inset -6px -6px 12px rgba(255,255,255,.9),
+inset 6px 6px 12px rgba(99,102,241,.08),
+0 15px 30px rgba(99,102,241,.12);
+}
+
+.badge{
+height:80px;
+border-radius:24px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:white;
+border:2px solid #e5e7eb;
+font-size:30px;
+transition:.3s;
+cursor:pointer;
+}
+
+.badge.active{
+background:linear-gradient(135deg,#6366f1,#8b5cf6);
+color:white;
+border:none;
+transform:scale(1.05);
+box-shadow:0 10px 20px rgba(99,102,241,.2);
+}
+
+.ball{
+width:150px;
+height:150px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:70px;
+font-weight:900;
+transition:.4s;
+}
+
+.ball-default{
+background:linear-gradient(135deg,#ffffff,#dbeafe);
+color:#4f46e5;
+box-shadow:
+0 15px 30px rgba(99,102,241,.12);
+}
+
+.ball-big{
+background:linear-gradient(135deg,#3b82f6,#06b6d4);
+color:white;
+box-shadow:0 15px 30px rgba(59,130,246,.25);
+}
+
+.ball-small{
+background:linear-gradient(135deg,#f59e0b,#ef4444);
+color:white;
+box-shadow:0 15px 30px rgba(239,68,68,.25);
+}
+
+.spin{
+animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+100%{
+transform:rotate(360deg);
+}
+}
+
+.pop{
+animation:pop .4s ease;
+}
+
+@keyframes pop{
+0%{
+transform:scale(.5);
+opacity:0;
+}
+100%{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.topbar{
+position:absolute;
+top:0;
+width:100%;
+padding:15px;
+z-index:100;
+}
+
+.timer{
+width:50px;
+height:60px;
+border-radius:18px;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+font-weight:900;
+color:#4f46e5;
+box-shadow:0 8px 20px rgba(99,102,241,.12);
+}
+
+.history-row{
+display:flex;
+align-items:center;
+padding:15px;
+font-size:13px;
+font-weight:600;
+border-bottom:1px solid #f3f4f6;
+}
+
+.drawer{
+position:fixed;
+right:-100%;
+top:0;
+width:82%;
+max-width:320px;
+height:100%;
+z-index:999;
+transition:.4s;
+}
+
+.drawer.open{
+right:0;
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.25);
+display:none;
+z-index:998;
+}
+
+::-webkit-scrollbar{
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg-design"></div>
+
+<div id="overlay"
+class="overlay"
+onclick="toggleDrawer(false)">
+</div>
+
+<!-- DRAWER -->
+
+<div id="drawer"
+class="drawer card p-6 flex flex-col">
+
+<div class="flex justify-between items-center">
+
+<h1 class="text-2xl font-black text-indigo-600">
+PROFILE
+</h1>
+
+<button onclick="toggleDrawer(false)">
+<i class="fa-solid fa-xmark text-2xl text-gray-600"></i>
+</button>
+
+</div>
+
+<div class="text-center mt-8">
+
+<div id="drawerAvatar"
+class="avatar mx-auto">
+<i class="fa-solid fa-user-secret"></i>
+</div>
+
+<h1 id="drawerName"
+class="text-2xl font-black mt-5">
+USER
+</h1>
+
+<p class="text-indigo-500 font-semibold mt-2">
+PREMIUM MEMBER
+</p>
+
+</div>
+
+<div class="mt-auto space-y-4">
+
+<a href="https://t.me/BN_OWNER"
+target="_blank">
+
+<button class="btn btn-primary">
+CONTACT ADMIN
+</button>
+
+</a>
+
+<button class="btn btn-light">
+VERSION 2026
+</button>
+
+</div>
+
+</div>
+
+<!-- LOGIN PAGE -->
+
+<section id="loginPage"
+class="page active items-center justify-center p-5">
+
+<div class="card rounded-[40px] p-8 w-full max-w-md text-center">
+
+<div class="avatar mx-auto">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+</div>
+
+<h1 class="text-4xl font-black text-indigo-600 mt-8">
+AI PREDICTOR
+</h1>
+
+<p class="text-gray-500 tracking-[5px] font-semibold mt-2">
+SECURE LOGIN
+</p>
+
+<div class="space-y-5 mt-10">
+
+<input
+type="text"
+id="accessKey"
+placeholder="ENTER ACCESS KEY"
+class="input">
+
+<button
+onclick="login()"
+id="loginBtn"
+class="btn btn-primary">
+LOGIN SYSTEM
+</button>
+
+<a href="https://t.me/BN_OWNER"
+target="_blank">
+
+<button class="btn btn-light">
+BUY ACCESS KEY
+</button>
+
+</a>
+
+<p id="loginMsg"
+class="text-red-500 font-semibold text-sm">
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- PROFILE PAGE -->
+
+<section id="setupPage"
+class="page items-center justify-center p-5">
+
+<div class="card rounded-[40px] p-8 w-full max-w-md">
+
+<h1 class="text-3xl text-center font-black text-indigo-600">
+CREATE PROFILE
+</h1>
+
+<div class="grid grid-cols-3 gap-4 mt-8">
+
+<div class="badge active"
+onclick="selectBadge('fa-user-secret',this)">
+<i class="fa-solid fa-user-secret"></i>
+</div>
+
+<div class="badge"
+onclick="selectBadge('fa-robot',this)">
+<i class="fa-solid fa-robot"></i>
+</div>
+
+<div class="badge"
+onclick="selectBadge('fa-dragon',this)">
+<i class="fa-solid fa-dragon"></i>
+</div>
+
+<div class="badge"
+onclick="selectBadge('fa-user-ninja',this)">
+<i class="fa-solid fa-user-ninja"></i>
+</div>
+
+<div class="badge"
+onclick="selectBadge('fa-crown',this)">
+<i class="fa-solid fa-crown"></i>
+</div>
+
+<div class="badge"
+onclick="selectBadge('fa-ghost',this)">
+<i class="fa-solid fa-ghost"></i>
+</div>
+
+</div>
+
+<input
+type="text"
+id="userName"
+placeholder="ENTER YOUR NAME"
+class="input mt-8">
+
+<button
+onclick="saveProfile()"
+class="btn btn-primary mt-6">
+SAVE PROFILE
+</button>
+
+</div>
+
+</section>
+
+<!-- WELCOME -->
+
+<section id="welcomePage"
+class="page items-center justify-center p-5">
+
+<div class="card rounded-[40px] p-10 text-center w-full max-w-md">
+
+<div id="welcomeAvatar"
+class="avatar mx-auto">
+<i class="fa-solid fa-user-secret"></i>
+</div>
+
+<h1 id="welcomeName"
+class="text-4xl font-black text-indigo-600 mt-8">
+USER
+</h1>
+
+<p class="text-gray-500 tracking-[5px] font-semibold mt-3">
+ACCESS VERIFIED
+</p>
+
+<button
+onclick="openPredictor()"
+class="btn btn-primary mt-10">
+ENTER PREDICTOR
+</button>
+
+</div>
+
+</section>
+
+<!-- PREDICTOR -->
+
+<section id="predictorPage"
+class="page flex-col">
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="card rounded-[25px] p-4 flex justify-between items-center">
+
+<button
+onclick="backWelcome()"
+class="w-12 h-12 rounded-2xl bg-white shadow-lg">
+
+<i class="fa-solid fa-arrow-left text-indigo-600"></i>
+
+</button>
+
+<h1 class="font-black text-indigo-600 tracking-[3px]">
+BN LAST KING BOT 
+</h1>
+
+<button
+onclick="toggleDrawer(true)"
+class="w-12 h-12 rounded-2xl bg-white shadow-lg">
+
+<i class="fa-solid fa-user text-indigo-600"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="flex-1 overflow-y-auto pt-28 pb-10 px-4">
+
+<!-- PERIOD -->
+
+<div class="card rounded-[35px] p-5">
+
+<div class="flex justify-between items-center">
+
+<div>
+
+<p class="text-gray-500 font-semibold">
+PERIOD
+</p>
+
+<h1 id="period"
+class="text-3xl font-black text-indigo-600 mt-2">
+00000
+</h1>
+
+</div>
+
+<div>
+
+<p class="text-gray-500 font-semibold text-right">
+TIME LEFT
+</p>
+
+<div class="flex gap-2 mt-2">
+
+<div id="s1"
+class="timer">
+0
+</div>
+
+<div id="s2"
+class="timer">
+0
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- BALL -->
+
+<div class="card rounded-[40px] p-10 mt-6 flex justify-center">
+
+<div id="ball"
+class="ball ball-default">
+?
+</div>
+
+</div>
+
+<!-- BUTTON -->
+
+<button
+onclick="predict()"
+id="predictBtn"
+class="btn btn-primary mt-6">
+GET PREDICTION
+</button>
+
+<!-- HISTORY -->
+
+<div class="card rounded-[35px] overflow-hidden mt-6">
+
+<div class="history-row bg-indigo-600 text-white font-black">
+
+<div class="w-[40%]">
+PERIOD
+</div>
+
+<div class="w-[20%] text-center">
+NUM
+</div>
+
+<div class="w-[25%] text-center">
+SIZE
+</div>
+
+<div class="w-[15%] text-center">
+CLR
+</div>
+
+</div>
+
+<div id="history">
+
+<div class="p-10 text-center text-indigo-500 font-semibold">
+CONNECTING...
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+let selectedBadge = 'fa-user-secret'
+
+let currentPeriod = '00000'
+
+let predictedPeriod = null
+
+function switchPage(id){
+
+document.querySelectorAll('.page')
+.forEach(e=>e.classList.remove('active'))
+
+document.getElementById(id)
+.classList.add('active')
+
+}
+
+function login(){
+
+const key =
+document.getElementById('accessKey')
+.value.trim()
+
+const msg =
+document.getElementById('loginMsg')
+
+const btn =
+document.getElementById('loginBtn')
+
+if(key.length < 3){
+
+msg.innerText='INVALID ACCESS KEY'
+return
+
+}
+
+btn.innerText='VERIFYING...'
+
+setTimeout(()=>{
+
+localStorage.setItem('accessKey',key)
+
+if(localStorage.getItem('username')){
+
+loadProfile()
+
+switchPage('welcomePage')
+
+}else{
+
+switchPage('setupPage')
+
+}
+
+btn.innerText='LOGIN SYSTEM'
+
+},1200)
+
+}
+
+function selectBadge(icon,el){
+
+selectedBadge = icon
+
+document.querySelectorAll('.badge')
+.forEach(e=>e.classList.remove('active'))
+
+el.classList.add('active')
+
+}
+
+function saveProfile(){
+
+const name =
+document.getElementById('userName')
+.value.trim()
+
+if(name==='') return
+
+localStorage.setItem('username',name)
+localStorage.setItem('badge',selectedBadge)
+
+loadProfile()
+
+switchPage('welcomePage')
+
+}
+
+function loadProfile(){
+
+const name =
+localStorage.getItem('username') || 'USER'
+
+const badge =
+localStorage.getItem('badge') || 'fa-user-secret'
+
+document.getElementById('welcomeName')
+.innerText = name
+
+document.getElementById('drawerName')
+.innerText = name
+
+document.getElementById('welcomeAvatar')
+.innerHTML =
+`<i class="fa-solid ${badge}"></i>`
+
+document.getElementById('drawerAvatar')
+.innerHTML =
+`<i class="fa-solid ${badge}"></i>`
+
+}
+
+function openPredictor(){
+
+switchPage('predictorPage')
+
+fetchHistory()
+
+setInterval(updateTimer,1000)
+
+}
+
+function backWelcome(){
+
+switchPage('welcomePage')
+
+}
+
+function toggleDrawer(show){
+
+const drawer =
+document.getElementById('drawer')
+
+const overlay =
+document.getElementById('overlay')
+
+if(show){
+
+drawer.classList.add('open')
+overlay.style.display='block'
+
+}else{
+
+drawer.classList.remove('open')
+overlay.style.display='none'
+
+}
+
+}
+
+function updateTimer(){
+
+const now = new Date()
+
+const remain = 60 - now.getSeconds()
+
+const str =
+remain < 10
+? '0'+remain
+: remain
+
+document.getElementById('s1')
+.innerText = str[0]
+
+document.getElementById('s2')
+.innerText = str[1]
+
+if(remain === 60 || remain === 1){
+
+fetchHistory()
+
+}
+
+}
+
+async function fetchHistory(){
+
+try{
+
+const response = await fetch(
+'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?t=' + Date.now()
+)
+
+const data = await response.json()
+
+const list = data.data.list
+
+currentPeriod =
+(BigInt(list[0].issueNumber)+1n)
+.toString()
+
+document.getElementById('period')
+.innerText =
+currentPeriod.slice(-5)
+
+const history =
+document.getElementById('history')
+
+history.innerHTML=''
+
+for(let i=0;i<12;i++){
+
+const item = list[i]
+
+const num = parseInt(item.number)
+
+const size =
+num >= 5 ? 'BIG':'SMALL'
+
+const color =
+[1,3,7,9].includes(num)
+? '🟢'
+:
+(num===0 || num===5)
+? '🟣'
+: '🔴'
+
+history.innerHTML += `
+
+<div class="history-row">
+
+<div class="w-[40%] text-gray-500">
+${item.issueNumber.slice(-5)}
+</div>
+
+<div class="w-[20%] text-center font-black text-indigo-600">
+${num}
+</div>
+
+<div class="w-[25%] text-center">
+${size}
+</div>
+
+<div class="w-[15%] text-center">
+${color}
+</div>
+
+</div>
+
+`
+
+}
+
+}catch(err){
+
+console.log(err)
+
+}
+
+}
+
+function predict(){
+
+if(predictedPeriod === currentPeriod)
+return
+
+predictedPeriod = currentPeriod
+
+const ball =
+document.getElementById('ball')
+
+const btn =
+document.getElementById('predictBtn')
+
+ball.className =
+'ball ball-default spin'
+
+ball.innerHTML =
+'<i class="fa-solid fa-microchip"></i>'
+
+btn.innerText='ANALYZING...'
+
+setTimeout(()=>{
+
+const big = Math.random() > .5
+
+ball.className =
+big
+? 'ball ball-big pop'
+: 'ball ball-small pop'
+
+ball.innerText =
+big ? 'B':'S'
+
+btn.innerText='PREDICTED'
+
+},1800)
+
+}
+
+window.onload=()=>{
+
+if(localStorage.getItem('username')){
+
+loadProfile()
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
